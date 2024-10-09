@@ -8,13 +8,12 @@ namespace EonValidation.ValidationTests
     public static class MissingComponentsValidator
     {
         private static readonly StringBuilder stringBuilder = new();
-        private static readonly Stack<Transform> transformsBuffer = new();
         
         public static List<ValidationIssue> ValidateGameObject(GameObject target, Object context = null)
         {
             var result = new List<ValidationIssue>();
             context ??= target;
-            foreach (var child in target.transform.IterateChildrenRecursively())
+            foreach (var child in target.IterateChildrenRecursively())
             {
                 foreach (var component in child.GetComponents<Component>())
                 {
@@ -51,21 +50,6 @@ namespace EonValidation.ValidationTests
             return stringBuilder.ToString();
         }
         
-        private static IEnumerable<Transform> IterateChildrenRecursively(this Transform parent)
-        {
-            transformsBuffer.Clear();
-            transformsBuffer.Push(parent);
-
-            while (transformsBuffer.Count > 0)
-            {
-                var current = transformsBuffer.Pop();
-                yield return current;
-
-                foreach (Transform child in current)
-                {
-                    transformsBuffer.Push(child);
-                }
-            }
-        }
+       
     }
 }
