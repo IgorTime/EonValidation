@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using EonValidation.Runtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace EonValidation.ValidationTests
 {
@@ -35,6 +36,18 @@ namespace EonValidation.ValidationTests
         public static List<ValidationIssue> ValidateScriptableObject(ScriptableObject scriptableObject)
         {
             return MissingReferenceFinder.FindMissingReferences(scriptableObject);
+        }
+        
+        public static List<ValidationIssue> ValidateScene(Scene scene, Object context = null)
+        {
+            var result = new List<ValidationIssue>();
+            foreach (var rootGameObject in scene.GetRootGameObjects())
+            {
+                var issues = ValidateGameObject(rootGameObject, context);
+                result.AddRange(issues);
+            }
+
+            return result;
         }
     }
 }
