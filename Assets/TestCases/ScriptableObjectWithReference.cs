@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-
-public class SriptableObjectWithReference : ScriptableObject
+namespace TestCases
 {
-    
+    [CreateAssetMenu]
+    public class ScriptableObjectWithReference : ScriptableObject
+    {
+        public Material materialReference;
+    }
 }
