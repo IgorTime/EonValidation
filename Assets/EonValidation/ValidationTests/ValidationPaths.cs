@@ -9,5 +9,10 @@ namespace EonValidation.ValidationTests
             AssetDatabase.FindAssets("t:prefab", new []{"Assets"})
                          .Select(AssetDatabase.GUIDToAssetPath)
                          .ToArray();
+        
+        public static string[] GetAllScenesInAssetsFolder() =>
+            AssetDatabase.FindAssets("t:scene", new []{"Assets"})
+                         .Select(AssetDatabase.GUIDToAssetPath)
+                         .ToArray();
     }
 }
