@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using EonValidation.Runtime;
 using UnityEngine;
 
@@ -7,8 +6,6 @@ namespace EonValidation.Editor
 {
     public static class MissingComponentsValidator
     {
-        private static readonly StringBuilder stringBuilder = new();
-
         public static List<ValidationIssue> ValidateGameObject(GameObject target, Object context = null)
         {
             var result = new List<ValidationIssue>();
@@ -22,10 +19,10 @@ namespace EonValidation.Editor
                         continue;
                     }
 
-                    var path = GetPath(child);
+                    var path = child.GetHierarchyPath();
                     result.Add(new ValidationIssue
                     {
-                        Message = "Missing component.",
+                        Message = "Missing component",
                         HierarchyPath = path,
                         Context = context,
                     });
@@ -35,20 +32,6 @@ namespace EonValidation.Editor
             }
 
             return result;
-        }
-
-        private static string GetPath(Transform target)
-        {
-            stringBuilder.Clear();
-            stringBuilder.Append(target.name);
-            target = target.parent;
-            while (target)
-            {
-                stringBuilder.Insert(0, target.name + "/");
-                target = target.parent;
-            }
-
-            return stringBuilder.ToString();
         }
     }
 }

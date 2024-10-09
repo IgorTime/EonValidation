@@ -7,7 +7,7 @@ namespace EonValidation.Editor
 {
     public static class MissingReferenceFinder
     {
-        public static List<ValidationIssue> FindMissingReferences(Object targetObject, Object context = null)
+        public static ValidationIssue[] FindMissingReferences(Object targetObject, Object context = null)
         {
             context ??= targetObject;
             var result = new List<ValidationIssue>();
@@ -20,19 +20,16 @@ namespace EonValidation.Editor
                     serializedProperty.objectReferenceValue == null &&
                     serializedProperty.objectReferenceInstanceIDValue != 0)
                 {
-                    var message =
-                        $"Missing reference. Target: {targetObject}. Property: {serializedProperty.propertyPath}";
-
                     result.Add(new ValidationIssue
                     {
-                        Message = message,
-                        HierarchyPath = serializedProperty.propertyPath,
+                        Message = "Missing reference",
+                        PropertyPath = $"{targetObject.GetType().Name}/{serializedProperty.propertyPath}",
                         Context = context,
                     });
                 }
             }
 
-            return result;
+            return result.ToArray();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace EonValidation.Editor
@@ -6,6 +7,21 @@ namespace EonValidation.Editor
     public static class TransformExtensions
     {
         private static readonly Stack<Transform> transformsBuffer = new();
+        private static readonly StringBuilder stringBuilder = new();
+
+        public static string GetHierarchyPath(this Transform target)
+        {
+            stringBuilder.Clear();
+            stringBuilder.Append(target.name);
+            target = target.parent;
+            while (target)
+            {
+                stringBuilder.Insert(0, target.name + "/");
+                target = target.parent;
+            }
+
+            return stringBuilder.ToString();
+        }
 
         public static IEnumerable<Transform> IterateChildrenRecursively(this Transform parent)
         {

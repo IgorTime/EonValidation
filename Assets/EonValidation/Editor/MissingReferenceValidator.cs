@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EonValidation.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,7 @@ namespace EonValidation.Editor
             context ??= target;
             foreach (var child in target.IterateChildrenRecursively())
             {
+                var hierarchyPath = child.GetHierarchyPath();
                 foreach (var component in child.GetComponents<Component>())
                 {
                     if (!component)
@@ -26,15 +28,21 @@ namespace EonValidation.Editor
                     }
 
                     var issues = MissingReferenceFinder.FindMissingReferences(component, context);
-                    result.AddRange(issues);
+                    for (var index = 0; index < issues.Length; index++)
+                    {
+                        issues[index].HierarchyPath = hierarchyPath;
+                        result.Add(issues[index]);
+                    }
                 }
             }
 
             return result;
         }
 
-        public static List<ValidationIssue> ValidateScriptableObject(ScriptableObject scriptableObject) =>
-            MissingReferenceFinder.FindMissingReferences(scriptableObject);
+        public static List<ValidationIssue> ValidateScriptableObject(ScriptableObject scriptableObject)
+        {
+            return MissingReferenceFinder.FindMissingReferences(scriptableObject).ToList();
+        }
 
         public static List<ValidationIssue> ValidateScene(Scene scene, Object context = null)
         {
