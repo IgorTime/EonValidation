@@ -11,23 +11,48 @@ namespace EonValidation.Editor
     {
         private static readonly HashSet<Type> ignoredTypes = new()
         {
-            typeof(GUISkin)
+            typeof(GUISkin),
         };
-        
+
         public static ValidationIssue[] FindMissingReferences(Object targetObject, Object context = null)
         {
-            if(targetObject == null)
+            if (targetObject == null)
             {
                 return Array.Empty<ValidationIssue>();
             }
-            
+
             if (ignoredTypes.Contains(targetObject.GetType()))
             {
                 return Array.Empty<ValidationIssue>();
             }
-            
+
             context ??= targetObject;
             var result = new List<ValidationIssue>();
+            foreach (var serializedProperty in IterateOverMissingReferences(targetObject))
+            {
+                result.Add(new ValidationIssue
+                {
+                    Message = "Missing reference",
+                    PropertyPath = $"{targetObject.GetType().Name}/{serializedProperty.propertyPath}",
+                    Context = context,
+                });
+            }
+
+            return result.ToArray();
+        }
+
+        public static IEnumerable<SerializedProperty> IterateOverMissingReferences(Object targetObject)
+        {
+            if (targetObject == null)
+            {
+                yield break;
+            }
+
+            if (ignoredTypes.Contains(targetObject.GetType()))
+            {
+                yield break;
+            }
+
             using var serializedObject = new SerializedObject(targetObject);
             var serializedProperty = serializedObject.GetIterator();
 
@@ -37,16 +62,23 @@ namespace EonValidation.Editor
                     serializedProperty.objectReferenceValue == null &&
                     serializedProperty.objectReferenceInstanceIDValue != 0)
                 {
-                    result.Add(new ValidationIssue
-                    {
-                        Message = "Missing reference",
-                        PropertyPath = $"{targetObject.GetType().Name}/{serializedProperty.propertyPath}",
-                        Context = context,
-                    });
+                    yield return serializedProperty;
                 }
             }
+        }
 
-            return result.ToArray();
+        public static IEnumerable<SerializedProperty> IterateOverMissingReferences(GameObject gameObject)
+        {
+            foreach (var child in gameObject.IterateChildrenRecursively())
+            {
+                foreach (var component in child.GetComponents<Component>())
+                {
+                    foreach (var missingReference in IterateOverMissingReferences(component))
+                    {
+                        yield return missingReference;
+                    }
+                }
+            }
         }
     }
 }
