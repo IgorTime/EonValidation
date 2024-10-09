@@ -1,0 +1,19 @@
+{
+  "name": "EonValidation.Tests",
+  "rootNamespace": "",
+  "references": [
+    "GUID:0e28c60c38a446f439d8fece5ee9536c",
+    "GUID:bbc696d1d45ff8b4f91ecff7735ef1e7"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

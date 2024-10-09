@@ -1,19 +1,20 @@
 using System.Collections.Generic;
+using EonValidation.Editor;
 using EonValidation.Runtime;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Tests
 {
-    public class MissingComponentsValidationTest
+    public class MissingComponents
     {
         private static string[] PrefabsInAssetsFolder => ValidationPaths.GetAllPrefabPathsInAssetsFolder();
         private static string[] ScenesInAssetsFolder => ValidationPaths.GetAllScenesInAssetsFolder();
 
         [Test]
-        public void FindMissingComponentsOnPrefabs([ValueSource(nameof(PrefabsInAssetsFolder))] string assetPath)
+        public void FindMissingComponentsInPrefabs([ValueSource(nameof(PrefabsInAssetsFolder))] string assetPath)
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
             var issues = MissingComponentsValidator.ValidateGameObject(prefab);

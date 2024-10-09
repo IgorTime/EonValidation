@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Editor
 {
     public static class TransformExtensions
     {

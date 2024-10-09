@@ -8,10 +8,7 @@ namespace EonValidation.Runtime
         public string HierarchyPath;
         public Object Context;
 
-        public override string ToString()
-        {
-            return $"{Message}, Object: {Context}, HierarchyPath: {HierarchyPath}";
-        }
+        public override string ToString() => $"{Message}, Object: {Context}, HierarchyPath: {HierarchyPath}";
 
         public void LogError()
         {

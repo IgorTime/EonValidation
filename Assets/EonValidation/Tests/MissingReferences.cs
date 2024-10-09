@@ -1,29 +1,28 @@
-﻿using System.Collections.Generic;
-using EonValidation.Runtime;
+﻿using EonValidation.Editor;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Tests
 {
-    public class MissingReferencesValidationTest
+    public class MissingReferences
     {
         private static string[] PrefabPaths => ValidationPaths.GetAllPrefabPathsInAssetsFolder();
         private static string[] ScriptableObjectPaths => ValidationPaths.GetAllScriptableObjectsInAssetsFolder();
         private static string[] ScenePaths => ValidationPaths.GetAllScenesInAssetsFolder();
-        
+
         [Test]
         public void FindMissingReferencesInPrefabs([ValueSource(nameof(PrefabPaths))] string path)
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             var issues = MissingReferenceValidator.ValidateGameObject(prefab);
-            
+
             if (issues.Count <= 0)
             {
                 return;
             }
-            
+
             foreach (var issue in issues)
             {
                 issue.LogError();
@@ -35,24 +34,24 @@ namespace EonValidation.ValidationTests
         {
             var scriptableObject = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
             var issues = MissingReferenceValidator.ValidateScriptableObject(scriptableObject);
-            
+
             if (issues.Count <= 0)
             {
                 return;
             }
-            
+
             foreach (var issue in issues)
             {
                 issue.LogError();
             }
         }
-        
+
         [Test]
         public void FindMissingReferencesInScenes([ValueSource(nameof(ScenePaths))] string path)
         {
             var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
             var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
-            
+
             try
             {
                 var issues = MissingReferenceValidator.ValidateScene(scene, sceneAsset);
@@ -66,7 +65,7 @@ namespace EonValidation.ValidationTests
                 {
                     issue.LogError();
                 }
-                
+
                 Assert.Fail();
             }
             finally

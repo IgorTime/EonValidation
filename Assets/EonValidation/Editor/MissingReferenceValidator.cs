@@ -3,7 +3,7 @@ using EonValidation.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Editor
 {
     public static class MissingReferenceValidator
     {
@@ -13,7 +13,7 @@ namespace EonValidation.ValidationTests
             {
                 return new List<ValidationIssue>();
             }
-            
+
             var result = new List<ValidationIssue>();
             context ??= target;
             foreach (var child in target.IterateChildrenRecursively())
@@ -33,11 +33,9 @@ namespace EonValidation.ValidationTests
             return result;
         }
 
-        public static List<ValidationIssue> ValidateScriptableObject(ScriptableObject scriptableObject)
-        {
-            return MissingReferenceFinder.FindMissingReferences(scriptableObject);
-        }
-        
+        public static List<ValidationIssue> ValidateScriptableObject(ScriptableObject scriptableObject) =>
+            MissingReferenceFinder.FindMissingReferences(scriptableObject);
+
         public static List<ValidationIssue> ValidateScene(Scene scene, Object context = null)
         {
             var result = new List<ValidationIssue>();

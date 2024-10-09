@@ -3,7 +3,7 @@ using EonValidation.Runtime;
 using UnityEditor;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Editor
 {
     public static class MissingReferenceFinder
     {
@@ -16,16 +16,18 @@ namespace EonValidation.ValidationTests
 
             while (serializedProperty.NextVisible(true))
             {
-                if (serializedProperty.propertyType == SerializedPropertyType.ObjectReference && 
-                    serializedProperty.objectReferenceValue == null && 
+                if (serializedProperty.propertyType == SerializedPropertyType.ObjectReference &&
+                    serializedProperty.objectReferenceValue == null &&
                     serializedProperty.objectReferenceInstanceIDValue != 0)
                 {
-                    var message = $"Missing reference. Target: {targetObject}. Property: {serializedProperty.propertyPath}";
+                    var message =
+                        $"Missing reference. Target: {targetObject}. Property: {serializedProperty.propertyPath}";
+
                     result.Add(new ValidationIssue
                     {
                         Message = message,
                         HierarchyPath = serializedProperty.propertyPath,
-                        Context = context
+                        Context = context,
                     });
                 }
             }

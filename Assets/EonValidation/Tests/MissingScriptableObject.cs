@@ -1,16 +1,18 @@
-﻿using NUnit.Framework;
+﻿using EonValidation.Editor;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Tests
 {
-    public class MissingScriptableObjectValidationTest
+    public class MissingScriptableObject
     {
-        private static string[] ScriptableObjectsInAssetsFolder => 
+        private static string[] ScriptableObjectsInAssetsFolder =>
             ValidationPaths.GetAllAssetsWithExtensionInAssetsFolder(".asset");
-        
+
         [Test]
-        public void FindMissingScriptableObjects([ValueSource(nameof(ScriptableObjectsInAssetsFolder))] string assetPath)
+        public void FindMissingScriptableObjects(
+            [ValueSource(nameof(ScriptableObjectsInAssetsFolder))] string assetPath)
         {
             var asset = AssetDatabase.LoadMainAssetAtPath(assetPath);
             var scriptableObject = asset as ScriptableObject;
@@ -18,7 +20,7 @@ namespace EonValidation.ValidationTests
             {
                 return;
             }
-            
+
             Debug.LogError($"Missing ScriptableObject: {assetPath}", asset);
         }
     }

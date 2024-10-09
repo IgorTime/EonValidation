@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Editor
 {
     public static class ValidationPaths
     {
@@ -10,17 +10,17 @@ namespace EonValidation.ValidationTests
             AssetDatabase.FindAssets("t:prefab", new[] {"Assets"})
                          .Select(AssetDatabase.GUIDToAssetPath)
                          .ToArray();
-        
+
         public static string[] GetAllScenesInAssetsFolder() =>
             AssetDatabase.FindAssets("t:scene", new[] {"Assets"})
                          .Select(AssetDatabase.GUIDToAssetPath)
                          .ToArray();
-        
+
         public static string[] GetAllScriptableObjectsInAssetsFolder() =>
             AssetDatabase.FindAssets($"t:{nameof(ScriptableObject)}", new[] {"Assets"})
                          .Select(AssetDatabase.GUIDToAssetPath)
                          .ToArray();
-        
+
         public static string[] GetAllAssetsWithExtensionInAssetsFolder(string extension) =>
             AssetDatabase.FindAssets($"t:{nameof(Object)}", new[] {"Assets"})
                          .Select(AssetDatabase.GUIDToAssetPath)

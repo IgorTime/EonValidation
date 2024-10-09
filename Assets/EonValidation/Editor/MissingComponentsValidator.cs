@@ -3,12 +3,12 @@ using System.Text;
 using EonValidation.Runtime;
 using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Editor
 {
     public static class MissingComponentsValidator
     {
         private static readonly StringBuilder stringBuilder = new();
-        
+
         public static List<ValidationIssue> ValidateGameObject(GameObject target, Object context = null)
         {
             var result = new List<ValidationIssue>();
@@ -27,15 +27,16 @@ namespace EonValidation.ValidationTests
                     {
                         Message = "Missing component.",
                         HierarchyPath = path,
-                        Context = context
+                        Context = context,
                     });
+
                     break;
                 }
             }
 
             return result;
         }
-        
+
         private static string GetPath(Transform target)
         {
             stringBuilder.Clear();
@@ -49,7 +50,5 @@ namespace EonValidation.ValidationTests
 
             return stringBuilder.ToString();
         }
-        
-       
     }
 }
