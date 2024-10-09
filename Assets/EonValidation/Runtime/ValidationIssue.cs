@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace EonValidation.ValidationTests
+namespace EonValidation.Runtime
 {
     public struct ValidationIssue
     {
