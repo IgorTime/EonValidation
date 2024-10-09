@@ -18,15 +18,7 @@ namespace EonValidation.Tests
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
             var issues = MissingComponentsValidator.ValidateGameObject(prefab);
-            if (issues.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (var issue in issues)
-            {
-                issue.LogError();
-            }
+            EonAssert.IssuesAreEmpty(issues);
         }
 
         [Test]
@@ -43,18 +35,8 @@ namespace EonValidation.Tests
                     var validationIssues = MissingComponentsValidator.ValidateGameObject(rootGameObject, sceneAsset);
                     issues.AddRange(validationIssues);
                 }
-
-                if (issues.Count <= 0)
-                {
-                    return;
-                }
-
-                foreach (var issue in issues)
-                {
-                    issue.LogError();
-                }
-
-                Assert.Fail();
+                
+                EonAssert.IssuesAreEmpty(issues);
             }
             finally
             {

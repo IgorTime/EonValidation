@@ -17,16 +17,7 @@ namespace EonValidation.Tests
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             var issues = MissingReferenceValidator.ValidateGameObject(prefab);
-
-            if (issues.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (var issue in issues)
-            {
-                issue.LogError();
-            }
+            EonAssert.IssuesAreEmpty(issues);
         }
 
         [Test]
@@ -34,16 +25,7 @@ namespace EonValidation.Tests
         {
             var scriptableObject = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
             var issues = MissingReferenceValidator.ValidateScriptableObject(scriptableObject);
-
-            if (issues.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (var issue in issues)
-            {
-                issue.LogError();
-            }
+            EonAssert.IssuesAreEmpty(issues);
         }
 
         [Test]
@@ -55,18 +37,7 @@ namespace EonValidation.Tests
             try
             {
                 var issues = MissingReferenceValidator.ValidateScene(scene, sceneAsset);
-
-                if (issues.Count <= 0)
-                {
-                    return;
-                }
-
-                foreach (var issue in issues)
-                {
-                    issue.LogError();
-                }
-
-                Assert.Fail();
+                EonAssert.IssuesAreEmpty(issues);
             }
             finally
             {
