@@ -17,24 +17,10 @@ namespace EonValidation.Editor
                     continue;
                 }
                 
-                if (asset is GameObject gameObject)
+                var any = MissingReferenceUtils.ClearMissingReferences(asset, true);
+                if (!any)
                 {
-                    foreach (var missingReference in MissingReferenceFinder.IterateOverMissingReferences(gameObject))
-                    {
-                        missingReference.objectReferenceValue = null;
-                        missingReference.serializedObject.ApplyModifiedProperties();
-                    }
-                    continue;
-                }
-                
-                if (asset is ScriptableObject scriptableObject)
-                {
-                    foreach (var missingReference in MissingReferenceFinder.IterateOverMissingReferences(scriptableObject))
-                    {
-                        missingReference.objectReferenceValue = null;
-                        missingReference.serializedObject.ApplyModifiedProperties();
-                    }
-                    continue;
+                    Debug.Log($"No missing references in '{assetPath}'");
                 }
             }
         }

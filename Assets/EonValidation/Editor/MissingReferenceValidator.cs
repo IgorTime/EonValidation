@@ -27,7 +27,7 @@ namespace EonValidation.Editor
                         continue;
                     }
 
-                    var issues = MissingReferenceFinder.FindMissingReferences(component, context);
+                    var issues = MissingReferenceUtils.FindMissingReferences(component, context);
                     for (var index = 0; index < issues.Length; index++)
                     {
                         issues[index].HierarchyPath = hierarchyPath;
@@ -41,7 +41,7 @@ namespace EonValidation.Editor
 
         public static List<ValidationIssue> ValidateScriptableObject(ScriptableObject scriptableObject)
         {
-            return MissingReferenceFinder.FindMissingReferences(scriptableObject).ToList();
+            return MissingReferenceUtils.FindMissingReferences(scriptableObject).ToList();
         }
 
         public static List<ValidationIssue> ValidateScene(Scene scene, Object context = null)
