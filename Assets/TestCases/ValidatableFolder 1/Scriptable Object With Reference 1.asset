@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0591f4468884434d90a891e6449e0f48, type: 3}
-  m_Name: Scriptable Object With Reference
+  m_Name: Scriptable Object With Reference 1
   m_EditorClassIdentifier: 
   value: 20
   materialReference: {fileID: 2100000, guid: d4dd9f09ca20454469c0796cadea38cb, type: 2}
