@@ -45,6 +45,8 @@ public class ValidatableComponent : MonoBehaviour, IValidatable
 
 3. **Setting up tests for custom validation**:
    - Use the **Asset Label** feature to configure tests for custom validations.
+![image](https://github.com/user-attachments/assets/9a1ceab9-d3f3-43dc-abd6-da951e31201e)
+
    - Add the label `'ValidationTarget'` to your target assets to include them in validation tests.
    - You can also label entire folders. In that case, all prefabs, scenes, and scriptable objects within that folder will be included in the validation tests.
    - A common approach is to organize your project assets into a content folder and label the root folder as a `ValidationTarget`. This ensures that only your project assets are validated, excluding third-party plugins.
