@@ -64,10 +64,13 @@ namespace EonValidation.Editor
         public static ValidationIssue[] ValidateScene(SceneAsset sceneAsset)
         {
             var scenePath = AssetDatabase.GetAssetPath(sceneAsset);
-            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
-            var issues = ValidateScene(scene);
-            EditorSceneManager.CloseScene(scene, true);
-            return issues;
+            return ValidateScene(scenePath);
+        }
+
+        public static ValidationIssue[] ValidateScene(string scenePath)
+        {
+            using var disposable = SceneValidationHelper.OpenScene(scenePath, out var scene);
+            return ValidateScene(scene);
         }
     }
 }
