@@ -32,15 +32,18 @@ namespace EonValidation.Editor
         }
 
         [MenuItem("GameObject/EonValidation/Clear Missing References", false, 0)]
-        public static void ClearMissingReferencesGameObjects()
+        public static void ClearMissingReferencesGameObjects(MenuCommand command)
         {
-            foreach (var gameObject in Selection.gameObjects)
+            var targetGameObject = command.context as GameObject;
+            if (!targetGameObject)
             {
-                var any = MissingReferenceUtils.ClearMissingReferences(gameObject, true);
-                if (!any)
-                {
-                    Debug.Log($"No missing references in '{gameObject.name}'");
-                }
+                return;
+            }
+            
+            var any = MissingReferenceUtils.ClearMissingReferences(targetGameObject, true);
+            if (!any)
+            {
+                Debug.Log($"No missing references in '{targetGameObject.name}'");
             }
         }
 
