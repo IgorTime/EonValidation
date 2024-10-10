@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using EonValidation.Runtime;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -58,6 +59,15 @@ namespace EonValidation.Editor
             }
 
             return issues.ToArray();
+        }
+
+        public static ValidationIssue[] ValidateScene(SceneAsset sceneAsset)
+        {
+            var scenePath = AssetDatabase.GetAssetPath(sceneAsset);
+            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+            var issues = ValidateScene(scene);
+            EditorSceneManager.CloseScene(scene, true);
+            return issues;
         }
     }
 }

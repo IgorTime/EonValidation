@@ -64,6 +64,7 @@ namespace EonValidation.Editor
                 {
                     GameObject gameObject => InterfaceValidator.ValidateGameObject(gameObject),
                     ScriptableObject scriptableObject => InterfaceValidator.ValidateObject(scriptableObject),
+                    SceneAsset sceneAsset => InterfaceValidator.ValidateScene(sceneAsset),
                     _ => Array.Empty<ValidationIssue>(),
                 };
 
@@ -79,7 +80,8 @@ namespace EonValidation.Editor
                 var assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 if (!IsFolder(assetPath) &&
                     !assetPath.EndsWith(".prefab") && 
-                    !assetPath.EndsWith(".asset"))
+                    !assetPath.EndsWith(".asset") &&
+                    !assetPath.EndsWith(".unity"))
                 {
                     return false;
                 }
@@ -95,7 +97,7 @@ namespace EonValidation.Editor
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 if (IsFolder(path))
                 {
-                    var objects = AssetDatabase.FindAssets("t:prefab t:ScriptableObject", new[] {path})
+                    var objects = AssetDatabase.FindAssets("t:prefab t:ScriptableObject t:scene", new[] {path})
                                                .Select(AssetDatabase.GUIDToAssetPath)
                                                .Select(AssetDatabase.LoadAssetAtPath<Object>);
 
@@ -107,7 +109,7 @@ namespace EonValidation.Editor
                     continue;
                 }
 
-                if (path.EndsWith(".prefab") || path.EndsWith(".asset"))
+                if (path.EndsWith(".prefab") || path.EndsWith(".asset") || path.EndsWith(".unity"))
                 {
                     yield return AssetDatabase.LoadAssetAtPath<Object>(path);
                 }
