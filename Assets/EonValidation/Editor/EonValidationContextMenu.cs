@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EonValidation.Runtime;
+using UnityEditor;
 using UnityEngine;
 
 namespace EonValidation.Editor
@@ -35,6 +36,17 @@ namespace EonValidation.Editor
                 {
                     Debug.Log($"No missing references in '{gameObject.name}'");
                 }
+            }
+        }
+
+        [MenuItem("GameObject/EonValidation/Validate Components", false, 0)]
+        public static void ValidateGameObjects(MenuCommand command)
+        {
+            var targetGameObject = command.context as GameObject;
+            if (targetGameObject)
+            {
+                var issues = InterfaceValidator.ValidateGameObject(targetGameObject);
+                ValidationIssue.LogIssues(issues);
             }
         }
     }

@@ -56,5 +56,19 @@ namespace EonValidation.Runtime
         {
             Debug.LogError(ToString(), Context);
         }
+
+        public static void LogIssues(ValidationIssue[] issues)
+        {
+            if (issues.Length == 0)
+            {
+                Debug.Log("No issues found");
+                return;
+            }
+            
+            for (var index = 0; index < issues.Length; index++)
+            {
+                issues[index].LogError();
+            }
+        }
     }
 }
