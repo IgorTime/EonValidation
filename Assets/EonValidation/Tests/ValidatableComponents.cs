@@ -1,5 +1,7 @@
 ﻿using EonValidation.Editor;
 using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
 
 namespace EonValidation.Tests
 {
@@ -10,7 +12,9 @@ namespace EonValidation.Tests
         [Test]
         public void ValidateComponents([ValueSource(nameof(Prefabs))] string path)
         {
-            Assert.Pass();
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            var issues = InterfaceValidator.ValidateGameObject(prefab);
+            EonAssert.IssuesAreEmpty(issues);
         }
     }
 }
