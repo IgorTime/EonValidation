@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using EonValidation.Runtime;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace EonValidation.Editor
 {
@@ -23,6 +25,36 @@ namespace EonValidation.Editor
             foreach (var validatable in target.GetComponentsInChildren<IValidatable>(true))
             {
                 validatable.Validate(ref issues);
+            }
+
+            return issues.ToArray();
+        }
+
+        public static ValidationIssue[] ValidateScene(Scene scene)
+        {
+            var issues = new List<ValidationIssue>
+            {
+                new(),
+            };
+
+            foreach (var gameObject in scene.GetRootGameObjects())
+            {
+                issues.AddRange(ValidateGameObject(gameObject));
+            }
+
+            if (issues.Count == 1)
+            {
+                issues.Clear();
+            }
+            else
+            {
+                var sceneAssetPath = scene.path;
+                var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(sceneAssetPath);
+                issues[0] = new ValidationIssue
+                {
+                    Message = "Invalid scene found. See issues for details.",
+                    Context = sceneAsset,
+                };
             }
 
             return issues.ToArray();

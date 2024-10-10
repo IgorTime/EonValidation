@@ -10,6 +10,7 @@ namespace EonValidation.Editor
         private const string VALIDATION_TARGET_FILTER = "l:ValidationTarget";
         private const string PREFAB_FILTER = "t:prefab";
         private const string SO_FILTER = "t:ScriptableObject";
+        private const string SCENE_FILTER = "t:Scene";
         private static readonly string[] assetsFolder = {"Assets"};
         
         public static string[] GetAllPrefabPathsInAssetsFolder() =>
@@ -18,7 +19,7 @@ namespace EonValidation.Editor
                          .ToArray();
 
         public static string[] GetAllScenesInAssetsFolder() =>
-            AssetDatabase.FindAssets("t:scene", assetsFolder)
+            AssetDatabase.FindAssets(SCENE_FILTER, assetsFolder)
                          .Select(AssetDatabase.GUIDToAssetPath)
                          .ToArray();
 
@@ -67,6 +68,21 @@ namespace EonValidation.Editor
             
             scriptableObjects.UnionWith(scriptableObjectsInFolders);
             return scriptableObjects.ToArray();
+        }
+
+        public static string[] GetAllValidationTargetScenes()
+        {
+            var folders = GetAllValidationTargetFolders();
+            var scenesInFolders = AssetDatabase.FindAssets(SCENE_FILTER, folders)
+                                               .Select(AssetDatabase.GUIDToAssetPath)
+                                               .ToHashSet();
+            
+            var scenes = AssetDatabase.FindAssets($"{SCENE_FILTER} {VALIDATION_TARGET_FILTER}", assetsFolder)
+                                      .Select(AssetDatabase.GUIDToAssetPath)
+                                      .ToHashSet();
+            
+            scenes.UnionWith(scenesInFolders);
+            return scenes.ToArray();
         }
     }
 }
