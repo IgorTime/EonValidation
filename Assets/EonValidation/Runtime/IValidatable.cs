@@ -1,7 +1,9 @@
-﻿namespace EonValidation.Runtime
+﻿using System.Collections.Generic;
+
+namespace EonValidation.Runtime
 {
     public interface IValidatable
     {
-        public ValidationIssue[] Validate();
+        public void Validate(ref List<ValidationIssue> issues);
     }
 }

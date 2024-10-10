@@ -2,7 +2,7 @@
 using System.Text;
 using UnityEngine;
 
-namespace EonValidation.Editor
+namespace EonValidation.Runtime
 {
     public static class TransformExtensions
     {

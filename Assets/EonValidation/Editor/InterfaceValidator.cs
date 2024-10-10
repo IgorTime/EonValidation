@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EonValidation.Runtime;
 using UnityEngine;
 
@@ -9,22 +8,23 @@ namespace EonValidation.Editor
     {
         public static ValidationIssue[] ValidateObject(object target)
         {
+            var issues = new List<ValidationIssue>();
             if (target is IValidatable validatable)
             {
-                return validatable.Validate();
+                validatable.Validate(ref issues);
             }
 
-            return Array.Empty<ValidationIssue>();
+            return issues.ToArray();
         }
-        
+
         public static ValidationIssue[] ValidateGameObject(GameObject target)
         {
             var issues = new List<ValidationIssue>();
             foreach (var validatable in target.GetComponentsInChildren<IValidatable>(true))
             {
-                issues.AddRange(validatable.Validate());
+                validatable.Validate(ref issues);
             }
-            
+
             return issues.ToArray();
         }
     }

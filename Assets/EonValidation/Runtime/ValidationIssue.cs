@@ -21,6 +21,16 @@ namespace EonValidation.Runtime
             AppendIfNotEmpty(PropertyPath, "Property path");
             return stringBuilder.ToString();
         }
+
+        public ValidationIssue(string message, Object context)
+        {
+            Message = message;
+            HierarchyPath = context is Component component 
+                ? component.transform.GetHierarchyPath() 
+                : null;
+            PropertyPath = null;
+            Context = context;
+        }
         
         private void AppendIfNotEmpty(string value, string prefix = "")
         {
