@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using EonValidation.Runtime;
 using UnityEditor;
 using UnityEngine;
@@ -19,7 +22,7 @@ namespace EonValidation.Editor
                 {
                     continue;
                 }
-                
+
                 var any = MissingReferenceUtils.ClearMissingReferences(asset, true);
                 if (!any)
                 {
@@ -48,36 +51,35 @@ namespace EonValidation.Editor
             if (targetGameObject)
             {
                 var issues = InterfaceValidator.ValidateGameObject(targetGameObject);
-                ValidationIssue.LogIssues(issues);
+                ValidationIssue.LogIssues(issues, targetGameObject);
             }
         }
-        
+
         [MenuItem("Assets/EonValidation/Validate", false, 0)]
         public static void ValidateAssets()
         {
-            foreach (var guid in Selection.assetGUIDs)
+            foreach (var target in GetAllSelectedValidatableTargets())
             {
-                var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
-                var issues = asset switch
+                var issues = target switch
                 {
                     GameObject gameObject => InterfaceValidator.ValidateGameObject(gameObject),
                     ScriptableObject scriptableObject => InterfaceValidator.ValidateObject(scriptableObject),
-                    _ => Array.Empty<ValidationIssue>()
+                    _ => Array.Empty<ValidationIssue>(),
                 };
 
-                ValidationIssue.LogIssues(issues);
+                ValidationIssue.LogIssues(issues, target);
             }
         }
-        
+
         [MenuItem("Assets/EonValidation/Validate", true)]
         public static bool ValidateAssetsValidation()
         {
             foreach (var guid in Selection.assetGUIDs)
             {
                 var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                if(!assetPath.EndsWith(".prefab") && 
-                   !assetPath.EndsWith(".asset"))
+                if (!IsFolder(assetPath) &&
+                    !assetPath.EndsWith(".prefab") && 
+                    !assetPath.EndsWith(".asset"))
                 {
                     return false;
                 }
@@ -85,5 +87,33 @@ namespace EonValidation.Editor
 
             return true;
         }
+
+        private static IEnumerable<Object> GetAllSelectedValidatableTargets()
+        {
+            foreach (var guid in Selection.assetGUIDs)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (IsFolder(path))
+                {
+                    var objects = AssetDatabase.FindAssets("t:prefab t:ScriptableObject", new[] {path})
+                                               .Select(AssetDatabase.GUIDToAssetPath)
+                                               .Select(AssetDatabase.LoadAssetAtPath<Object>);
+
+                    foreach (var obj in objects)
+                    {
+                        yield return obj;
+                    }
+
+                    continue;
+                }
+
+                if (path.EndsWith(".prefab") || path.EndsWith(".asset"))
+                {
+                    yield return AssetDatabase.LoadAssetAtPath<Object>(path);
+                }
+            }
+        }
+
+        private static bool IsFolder(string path) => !Path.HasExtension(path);
     }
 }

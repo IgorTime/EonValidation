@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EonValidation.Tests
 {
-    public class ValidatableComponents
+    public class ValidatableTargets
     {
         private static string[] Prefabs => ValidationPaths.GetAllValidationTargetPrefabs();
         private static string[] ScriptableObjects => ValidationPaths.GetAllValidationTargetScriptableObjects();
