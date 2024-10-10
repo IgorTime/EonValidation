@@ -1,6 +1,8 @@
-﻿using EonValidation.Runtime;
+﻿using System;
+using EonValidation.Runtime;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace EonValidation.Editor
 {
@@ -48,6 +50,40 @@ namespace EonValidation.Editor
                 var issues = InterfaceValidator.ValidateGameObject(targetGameObject);
                 ValidationIssue.LogIssues(issues);
             }
+        }
+        
+        [MenuItem("Assets/EonValidation/Validate", false, 0)]
+        public static void ValidateAssets()
+        {
+            foreach (var guid in Selection.assetGUIDs)
+            {
+                var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                var asset = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
+                var issues = asset switch
+                {
+                    GameObject gameObject => InterfaceValidator.ValidateGameObject(gameObject),
+                    ScriptableObject scriptableObject => InterfaceValidator.ValidateObject(scriptableObject),
+                    _ => Array.Empty<ValidationIssue>()
+                };
+
+                ValidationIssue.LogIssues(issues);
+            }
+        }
+        
+        [MenuItem("Assets/EonValidation/Validate", true)]
+        public static bool ValidateAssetsValidation()
+        {
+            foreach (var guid in Selection.assetGUIDs)
+            {
+                var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if(!assetPath.EndsWith(".prefab") && 
+                   !assetPath.EndsWith(".asset"))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
